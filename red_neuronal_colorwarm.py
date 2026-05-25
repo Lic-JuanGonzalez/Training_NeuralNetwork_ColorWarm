@@ -10,9 +10,13 @@ Original file is located at
 #importar librerias
 import numpy as np
 import scipy as sc
+import matplotlib
+matplotlib.use('Qt5Agg')
 import matplotlib.pyplot as plt
 
 from sklearn.datasets import make_circles
+
+plt.ion()
 
 # Crear el DATASET
 n = 500
@@ -25,7 +29,8 @@ plt.scatter(X[Y[:, 0] == 0, 0], X[Y[:, 0] == 0, 1], c="cyan")
 plt.scatter(X[Y[:, 0] == 1, 0], X[Y[:, 0] == 1, 1], c="gold")
 
 plt.axis("equal")
-plt.show()
+plt.pause(2)
+plt.clf()
 
 # Clase de la capa de RED
 class NeuralLayer():
@@ -47,11 +52,12 @@ l2_cost = (lambda Yp, Yr: np.mean((Yp-Yr) ** 2),
 x = np.linspace(-2,2,100)
 
 plt.plot(sigm[0](x), c="skyblue")
-plt.show()
-
+plt.pause(2)
+plt.clf()
 
 plt.plot(relu[0](x), c="skyblue")
-plt.show()
+plt.pause(2)
+plt.clf()
 
 def createNN(topology, act_fun):
   nn = []
@@ -100,7 +106,6 @@ resolution = 50
 loss = []
 epoch = 0
 
-from IPython.display import clear_output
 
 for i in range(5000):
   epoch += 1
@@ -117,18 +122,20 @@ for i in range(5000):
       for i1, x1 in enumerate(_x1):
         _Y[i0,i1] = train(NN, np.array([[x0, x1]]), Y, l2_cost, 0.03)[0][0]
 
-    clear_output(wait=True)
     print("Epoch: ", epoch)
     print("Loss: ", loss[-1])
 
+    plt.clf()
+    plt.subplot(1, 2, 1)
     plt.pcolormesh(_x0, _x1, _Y, cmap="coolwarm") # Inferno | Plasma | Viridis | BuPu | RdBu | coolwarm
     plt.axis("equal")
-
     plt.scatter(X[Y[:, 0] == 0, 0], X[Y[:, 0] == 0, 1], c="cyan")
     plt.scatter(X[Y[:, 0] == 1, 0], X[Y[:, 0] == 1, 1], c="gold")
 
-    plt.show()
-
+    plt.subplot(1, 2, 2)
     plt.plot(range(len(loss)), loss)
-    plt.show()
 
+    plt.pause(0.1)
+
+plt.ioff()
+plt.show()
